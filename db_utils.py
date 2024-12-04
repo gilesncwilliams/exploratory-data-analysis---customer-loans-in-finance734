@@ -1,6 +1,6 @@
+import pandas as pd
 from sqlalchemy import create_engine, inspect
 import yaml
-import pandas as pd
 
 
 def load_credentials():
@@ -33,23 +33,6 @@ class RDSDatabaseConnector:
         engine = create_engine(f"postgresql+psycopg2://{credentials['RDS_USER']}:{credentials['RDS_PASSWORD']}@{credentials['RDS_HOST']}:{credentials['RDS_PORT']}/{credentials['RDS_DATABASE']}")
         return engine    
 
-def list_db_tables(engine):
-        """
-        Creates a list of database tables from the database connection.
-
-        Using SQLalchemy's inspect function to view the RDS database and 
-        create a list of tables contained within it.
-
-        Args:
-            engine: sqlalchmey engine  
-        
-        Returns:
-            inspector: a list of the table names
-        """
-        inspector = inspect(engine)
-        return list(inspector.get_table_names())      
-
-
 def read_rds_table(table_name, engine):
     """Reads an AWS RDS database table.
 
@@ -64,6 +47,15 @@ def read_rds_table(table_name, engine):
     return df
 
 def save_csv(df, filename):
+    """Downloads and saves a Pandas Dataframe a CSV file.
+
+    Args:
+        df: the Pandas dataframe.
+        filename: the filename given to the resulting csv file.
+
+    Returns:
+        df: a Pandas dataframe.
+    """
     df.to_csv(filename, index=False, encoding='utf-8')
 
 if __name__=="__main__": 
