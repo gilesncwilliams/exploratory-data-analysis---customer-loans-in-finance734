@@ -8,7 +8,7 @@ def load_credentials():
 Reads credentials for an AWS RDS database from a yaml file.
 
 Returns:
-    credentials: a dictionary of the database credentials  
+    credentials: a dictionary of the database's credentials  
 """
     with open('credentials.yaml', 'r') as f:
         credentials = yaml.safe_load(f)
@@ -46,8 +46,8 @@ def read_rds_table(table_name, engine):
     df = pd.read_sql_table(table_name, engine)
     return df
 
-def save_csv(df, filename):
-    """Downloads and saves a Pandas Dataframe a CSV file.
+def download_csv(df, filename):
+    """Downloads and saves a Pandas Dataframe as a CSV file.
 
     Args:
         df: the Pandas dataframe.
@@ -58,9 +58,21 @@ def save_csv(df, filename):
     """
     df.to_csv(filename, index=False, encoding='utf-8')
 
+def read_csv(filename):
+    """Reads a csv file and convert to a Pandas Dataframe.
+
+    Args:
+        filename: the filename of the csv to be read.
+
+    Returns:
+        df: a Pandas dataframe.
+    """
+    df = pd.read_csv(filename)
+    return df
+
 if __name__=="__main__": 
     credentials = load_credentials()
     engine = RDSDatabaseConnector.init_engine(credentials)
     loan_payments_df = read_rds_table('loan_payments', engine)
-    save_csv(loan_payments_df, 'loan_payments.csv')
+    download_csv(loan_payments_df, 'loan_payments.csv')
 
