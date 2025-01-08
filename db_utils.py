@@ -1,21 +1,36 @@
+"""
+Various utility functions for connecting to an RDS Database and extracting data. 
+
+Classes:
+    RDSDatabaseConnector
+
+Functions:
+    load_credentials(yaml file) -> dictionary
+    init_engine(dictionary) -> sqlalchemy database engine
+    read_rds_table(RDS table, sqlalchemy database engine) -> Pandas.Dataframe
+    download_csv(Pandas.Dataframe) -> CSV file
+    read_csv(CSV file) -> Pandas.Dataframe
+"""
+
 import pandas as pd
-from sqlalchemy import create_engine, inspect
+from sqlalchemy import create_engine
 import yaml
 
 
 def load_credentials():
     """
-Reads credentials for an AWS RDS database from a yaml file.
+    Reads credentials for an AWS RDS database from a yaml file.
 
-Returns:
-    credentials: a dictionary of the database's credentials  
-"""
+    Returns:
+        credentials: a dictionary of the database's credentials  
+    """
     with open('credentials.yaml', 'r') as f:
         credentials = yaml.safe_load(f)
     return credentials
 
 
 class RDSDatabaseConnector:
+    """Connect to AWS RDS Database."""
 
     def __init__(self, credentials):
         self.credentials = credentials
